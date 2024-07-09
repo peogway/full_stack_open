@@ -41,13 +41,22 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
     const foundPerson =persons.find((person) => person.name === newName)
-
     if (foundPerson){
       if (confirm(`${newName} is already added to phone book, replace the old number with a new one?`)){
         const updatedPerson = {...foundPerson, number :newNumber}
         personServices
         .update(updatedPerson.id, updatedPerson)
         .then( returnedPerson=> {
+          if (!returnedPerson){
+            setPersons(persons.filter(person=> person.id!==updatedPerson.id))
+            setErrorMessage(
+              `Information of ${updatedPerson.name} has already been removed from server`
+            )
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)  
+            return
+          }
           setPersons(persons.map(person => person.id !== updatedPerson.id ?person : returnedPerson));
           setNotification(
             `Update number of ${updatedPerson.name} to ${updatedPerson.number}`
@@ -56,26 +65,21 @@ const App = () => {
             setNotification(null)
           }, 5000)
         })
-        .catch(error =>{
-          setPersons(persons.filter(person=> person.id!==updatedPerson.id))
-          setErrorMessage(
-            `Information of ${updatedPerson.name} has already been removed from server`
-          )
+        .catch(error => {
+          setErrorMessage(error.response.data.error)
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
         })
-
-        
-        
       }
       return
     }
-          
+
     const newPerson = {
       name : newName,
       number : newNumber, 
     }
+
 
     personServices
       .create(newPerson)
@@ -83,14 +87,20 @@ const App = () => {
         setPersons(persons.concat(createdPerson));
         setNewName('');
         setNewNumber('');
+        setNotification(
+          `Added ${newPerson.name}`
+        )
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
       })
-
-      setNotification(
-        `Added ${newPerson.name}`
-      )
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      .catch(error => {
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        
+      })
   }
 
 
