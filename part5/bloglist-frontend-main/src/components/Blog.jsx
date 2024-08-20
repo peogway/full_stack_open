@@ -31,7 +31,7 @@ const Blog = ({ blog, increaseLike, deleteBlog, currentUser }) => {
       <button onClick={toggleVisibility} className='btn visibility-btn'>
         {labelBtn}
       </button>
-      <div style={detailShow}>
+      <div style={detailShow} className='detail'>
         <a href='#'>{blog.url}</a>
         <br />
         likes {blog.likes}
