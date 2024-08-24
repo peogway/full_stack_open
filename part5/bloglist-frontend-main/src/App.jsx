@@ -57,15 +57,13 @@ const App = () => {
   const loginForm = () => {
     return (
       <div>
-        <Togglable buttonLabel='Login'>
-          <LoginForm
-            username={username}
-            password={password}
-            handleSubmit={handleLogin}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-          ></LoginForm>
-        </Togglable>
+        <LoginForm
+          username={username}
+          password={password}
+          handleSubmit={handleLogin}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+        ></LoginForm>
       </div>
     )
   }
@@ -114,7 +112,7 @@ const App = () => {
   }
 
   const blogForm = () => (
-    <div>
+    <div className='blog-list'>
       <h2>blogs</h2>
       <p>
         {user.username} logged in
@@ -145,6 +143,7 @@ const App = () => {
       <Notification message={errorMessage} className='error' />
 
       <Notification message={notificationMessage} className='notification' />
+      <h1>Blog App</h1>
 
       {user === null ? loginForm() : <div>{blogForm()}</div>}
     </div>
