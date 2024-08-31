@@ -16,4 +16,12 @@ const notiSlice = createSlice({
 });
 
 export const { setNoti, removeNoti } = notiSlice.actions;
+
+export const setNotification = (notification, seconds) => {
+  return async (dispatch) => {
+    dispatch(setNoti(notification));
+    setTimeout(() => dispatch(removeNoti()), seconds * 1000);
+  };
+};
+
 export default notiSlice.reducer;
