@@ -1,0 +1,44 @@
+.notification {
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.remove-btn {
+  background: rgb(110, 110, 192);
+  margin-left: 10px;
+  margin-top: 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+}
+
+.btn {
+  margin-left: 10px;
+}
+
+.cancel-btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.btn-create {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
