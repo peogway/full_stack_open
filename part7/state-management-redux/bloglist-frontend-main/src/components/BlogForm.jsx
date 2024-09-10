@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { createBlog } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
 const BlogForm = ({ createBlog }) => {
+  const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -49,3 +52,4 @@ const BlogForm = ({ createBlog }) => {
 }
 
 export default BlogForm
+
