@@ -1,5 +1,8 @@
+import { useDispatch } from 'react-redux'
+import { setNotification } from '../reducers/notiReducer'
+
 const Notification = ({ message, className }) => {
-  if (message === null) {
+  if (!message) {
     return null
   }
 
@@ -7,3 +10,4 @@ const Notification = ({ message, className }) => {
 }
 
 export default Notification
+

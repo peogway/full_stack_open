@@ -1,17 +1,17 @@
-import { useState } from 'react'
-import { createBlog } from '../reducers/blogReducer'
-import { useDispatch } from 'react-redux'
+import { useField } from '../hooks/hook'
 
 const BlogForm = ({ createBlog }) => {
-  const dispatch = useDispatch()
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const { remove: rmTitle, ...title } = useField('text')
+  const { remove: rmAuthor, ...author } = useField('text')
+  const { remove: rmUrl, ...url } = useField('text')
 
   const addBlog = (event) => {
     event.preventDefault()
-    const blog = { title, author, url }
+    const blog = { title: title.value, author: author.value, url: url.value }
     createBlog(blog)
+    rmTitle()
+    rmAuthor()
+    rmUrl()
   }
 
   return (
@@ -20,27 +20,15 @@ const BlogForm = ({ createBlog }) => {
       <form onSubmit={addBlog}>
         <div className='title'>
           title:
-          <input
-            data-testid='title'
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
+          <input data-testid='title' {...title} />
         </div>
 
         <div className='author'>
           author:
-          <input
-            data-testid='author'
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
+          <input data-testid='author' {...author} />
           <div className='url'>
             url:
-            <input
-              data-testid='url'
-              value={url}
-              onChange={({ target }) => setUrl(target.value)}
-            />
+            <input data-testid='url' {...url} />
           </div>
           <button type='submit' className='btn btn-create'>
             create
