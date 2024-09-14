@@ -1,18 +1,15 @@
-import { useDispatch } from 'react-redux'
-import { setError } from '../reducers/notiReducer'
-import { setUserFn } from '../reducers/userReducer'
 import { useState } from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
-
+import { useNotiDispatch } from '../contexts/NotificationContext'
 import { useField } from '../hooks/hook'
+import { useUserDispatch } from '../contexts/UserContext'
 
 const LoginForm = () => {
-  const dispatch = useDispatch()
-
   const { remove: rmUsername, ...username } = useField('text')
   const { remove: rmPassword, ...password } = useField('password')
-
+  const notificationDispatch = useNotiDispatch()
+  const userDispatch = useUserDispatch()
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -24,11 +21,18 @@ const LoginForm = () => {
 
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      dispatch(setUserFn(user))
+      userDispatch({ type: 'SET_USER', payload: user })
+
       rmUsername()
       rmPassword()
     } catch (exception) {
-      dispatch(setError('Wrong Credentials', 5))
+      notificationDispatch({
+        type: 'NEW_ERROR',
+        payload: 'Wrong Credentials',
+      })
+      setTimeout(() => {
+        notificationDispatch({ type: 'RM_ERROR' })
+      }, 5000)
     }
   }
   return (

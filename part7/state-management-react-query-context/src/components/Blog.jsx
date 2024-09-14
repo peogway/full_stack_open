@@ -1,4 +1,3 @@
-import Togglable from './Togglable'
 import { useState } from 'react'
 
 const Blog = ({ blog, increaseLike, deleteBlog, currentUser }) => {
@@ -54,3 +53,4 @@ const Blog = ({ blog, increaseLike, deleteBlog, currentUser }) => {
 }
 
 export default Blog
+

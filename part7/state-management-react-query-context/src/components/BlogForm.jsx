@@ -1,14 +1,36 @@
 import { useField } from '../hooks/hook'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import blogService from '../services/blogs'
 
-const BlogForm = ({ createBlog }) => {
+import { useNotiDispatch } from '../contexts/NotificationContext'
+
+const BlogForm = ({ toggleVisibility }) => {
   const { remove: rmTitle, ...title } = useField('text')
   const { remove: rmAuthor, ...author } = useField('text')
   const { remove: rmUrl, ...url } = useField('text')
-
+  const notiDispatch = useNotiDispatch()
+  const queryClient = useQueryClient()
+  const newBlogMutation = useMutation({
+    mutationFn: blogService.addBlog,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['blogs'] }),
+  })
   const addBlog = (event) => {
     event.preventDefault()
     const blog = { title: title.value, author: author.value, url: url.value }
-    createBlog(blog)
+    newBlogMutation.mutate(blog)
+    toggleVisibility()
+    notiDispatch({
+      type: 'NEW_NOTI',
+      payload: `a new blog ${blog.title} by ${blog.author} added`,
+    })
+    setTimeout(
+      () =>
+        notiDispatch({
+          type: 'RM_NOTI',
+        }),
+      5000
+    )
+
     rmTitle()
     rmAuthor()
     rmUrl()

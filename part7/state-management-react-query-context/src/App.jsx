@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import Notification from './components/Notification'
 import blogService from './services/blogs'
@@ -6,27 +6,23 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
-
-import { useDispatch, useSelector } from 'react-redux'
-import { createNewBlog } from './reducers/blogReducer'
-import { setNotification, setError } from './reducers/notiReducer'
-import { setUserFn, rmUserFn } from './reducers/userReducer'
+import { useNotiValue } from './contexts/NotificationContext'
+import { useUserValue, useUserDispatch } from './contexts/UserContext'
 
 const App = () => {
-  const dispatch = useDispatch()
-  const notification = useSelector((state) => state.notiReducer)
-  const user = useSelector((state) => state.user)
-
   const blogFormRef = useRef()
+  const notification = useNotiValue()
+  const userDispatch = useUserDispatch()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      dispatch(setUserFn(user))
       blogService.setToken(user.token)
+      userDispatch({ type: 'SET_USER', payload: user })
     }
   }, [])
+  const user = useUserValue()
 
   const loginForm = () => (
     <div>
@@ -36,15 +32,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
-    dispatch(rmUserFn())
-  }
-
-  const crtBlog = (blog) => {
-    blogFormRef.current.toggleVisibility()
-    dispatch(createNewBlog(blog))
-    dispatch(
-      setNotification(`a new blog ${blog.title} by ${blog.author} added`, 5)
-    )
+    userDispatch({ type: 'RM_USER' })
   }
 
   const blogForm = () => (
@@ -58,7 +46,9 @@ const App = () => {
       <br />
 
       <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
-        <BlogForm createBlog={crtBlog}></BlogForm>
+        <BlogForm
+          toggleVisibility={() => blogFormRef.current.toggleVisibility()}
+        ></BlogForm>
       </Togglable>
 
       <BlogList currentUser={user} />

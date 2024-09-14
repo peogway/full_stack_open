@@ -1,23 +1,39 @@
 import Blog from './Blog'
-import { setAllBlog, likeBlog, deleteBlog } from '../reducers/blogReducer'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+
+import blogService from '../services/blogs'
 
 const BlogList = ({ currentUser }) => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(setAllBlog())
-  }, [])
+  const queryClient = useQueryClient()
 
-  const blogs = useSelector((state) => state.blogs)
+  const result = useQuery({
+    queryKey: ['blogs'],
+    queryFn: blogService.getAll,
+    refetchOnWindowFocus: false,
+  })
+
+  const likeMutation = useMutation({
+    mutationFn: blogService.incLike,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['blogs'] }),
+  })
+  const dltMutation = useMutation({
+    mutationFn: blogService.deleteBlog,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['blogs'] }),
+  })
+
+  if (result.isLoading) {
+    return <div>loading data...</div>
+  }
+
+  const blogs = result.data.sort((a, b) => b.likes - a.likes)
 
   const like = (blog) => {
-    dispatch(likeBlog(blog))
+    likeMutation.mutate(blog)
   }
 
   const dltBlog = (blog) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      dispatch(deleteBlog(blog.id))
+      dltMutation.mutate(blog.id)
     }
   }
 
