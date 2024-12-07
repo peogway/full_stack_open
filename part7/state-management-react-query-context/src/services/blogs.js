@@ -3,7 +3,7 @@ const baseUrl = "http://localhost:3001/api/blogs";
 let token = null;
 
 const setToken = (newToken) => token = `Bearer ${newToken}`;
-
+const getToken = () => token;
 const getAll = async () => {
   const response = await axios.get(baseUrl);
   return response.data;
@@ -38,4 +38,4 @@ const deleteBlog = async (blogId) => {
   return response.data;
 };
 
-export default { getAll, setToken, addBlog, incLike, deleteBlog };
+export default { getAll, setToken, addBlog, incLike, deleteBlog, getToken };

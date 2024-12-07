@@ -2,6 +2,7 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
+
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
     .find({})
@@ -78,12 +79,26 @@ blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
   const blog = {
     likes: body.likes,
+    comments: []
   }
 
   await Blog.findByIdAndUpdate(request.params.id, blog, {
     new: true,
   })
   response.status(204).end()
+})
+
+blogsRouter.post('/:id/comments', async (req, res) => {
+  const userRequest = req.user
+  if (!userRequest) {
+    return res.status(401).json({ error: 'token invalid' })
+  }
+  
+  const blogWithNewComment = await Blog.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  })
+  res.status(201).json(blogWithNewComment)
+
 })
 
 module.exports = blogsRouter

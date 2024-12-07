@@ -3,21 +3,28 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import blogService from '../services/blogs'
 
 import { useNotiDispatch } from '../contexts/NotificationContext'
+import { useBlogsDispatch } from '../contexts/BlogsContext'
 
 const BlogForm = ({ toggleVisibility }) => {
   const { remove: rmTitle, ...title } = useField('text')
   const { remove: rmAuthor, ...author } = useField('text')
   const { remove: rmUrl, ...url } = useField('text')
+  const blogsDispatch = useBlogsDispatch()
   const notiDispatch = useNotiDispatch()
   const queryClient = useQueryClient()
   const newBlogMutation = useMutation({
     mutationFn: blogService.addBlog,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['blogs'] }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+
+      blogsDispatch({ type: 'NEW_BLOG', payload: data })
+    },
   })
   const addBlog = (event) => {
     event.preventDefault()
     const blog = { title: title.value, author: author.value, url: url.value }
     newBlogMutation.mutate(blog)
+
     toggleVisibility()
     notiDispatch({
       type: 'NEW_NOTI',

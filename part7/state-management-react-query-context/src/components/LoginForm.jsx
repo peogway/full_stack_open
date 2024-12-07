@@ -4,12 +4,14 @@ import blogService from '../services/blogs'
 import { useNotiDispatch } from '../contexts/NotificationContext'
 import { useField } from '../hooks/hook'
 import { useUserDispatch } from '../contexts/UserContext'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm = () => {
   const { remove: rmUsername, ...username } = useField('text')
   const { remove: rmPassword, ...password } = useField('password')
   const notificationDispatch = useNotiDispatch()
   const userDispatch = useUserDispatch()
+  const navigate = useNavigate()
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -25,6 +27,7 @@ const LoginForm = () => {
 
       rmUsername()
       rmPassword()
+      navigate('/')
     } catch (exception) {
       notificationDispatch({
         type: 'NEW_ERROR',
