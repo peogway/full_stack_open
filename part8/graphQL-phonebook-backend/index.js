@@ -8,6 +8,7 @@ mongoose.set("strictQuery", false);
 const Book = require("./models/Book");
 const Author = require("./models/Author");
 const User = require("./models/user");
+const Favorite = require("./models/favorite");
 require("dotenv").config();
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -28,6 +29,7 @@ const typeDefs = `
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+    favoriteGenre: Favorite
     me: User
   }
 
@@ -43,6 +45,10 @@ const typeDefs = `
         id: String!
         bookCount:Int
         born: Int
+    }
+
+    type Favorite{
+        genre: String
     }
     
     type Mutation{
@@ -67,6 +73,10 @@ const typeDefs = `
             username: String!
             password: String!
         ): Token
+
+        setFavorite(
+            genre: String!
+        ): Favorite
     }
     type User {
         username: String!
@@ -134,6 +144,12 @@ const resolvers = {
                 };
             });
         },
+        favoriteGenre: async () => {
+            const favGenre = await Favorite.find();
+            if (favGenre.length == 0) {
+                return { genre: null };
+            } else return { genre: favGenre[0].genre };
+        },
         me: (root, args, context) => {
             return context.currentUser;
         },
@@ -193,6 +209,19 @@ const resolvers = {
             // }
 
             return book;
+        },
+
+        setFavorite: async (root, args) => {
+            const favGenre = await Favorite.find({});
+            const favoriteGenre = favGenre[0];
+            if (favGenre.length > 0) {
+                favoriteGenre.genre = args.genre;
+                await favoriteGenre.save();
+                return favoriteGenre;
+            }
+            const genre = new Favorite({ genre: args.genre });
+            await genre.save();
+            return genre;
         },
 
         editAuthor: async (root, args, { currentUser }) => {

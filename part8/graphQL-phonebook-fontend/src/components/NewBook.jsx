@@ -23,7 +23,7 @@ const NewBook = (props) => {
     event.preventDefault()
 
     addBook({
-      variables: { title, author, published: parseInt(published), genres },
+      variables: { title, published: parseInt(published), author, genres },
     })
 
     setTitle('')
@@ -49,18 +49,18 @@ const NewBook = (props) => {
           />
         </div>
         <div>
-          author
-          <input
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
           published
           <input
             type='number'
             value={published}
             onChange={({ target }) => setPublished(target.value)}
+          />
+        </div>
+        <div>
+          author
+          <input
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
