@@ -1,5 +1,5 @@
 import diagnoses from '../data/diagnoses'
-import { Diagnose, DiagnoseWithoutLatin } from '../types'
+import { Diagnose, DiagnoseWithoutLatin } from '../types/DianoseType'
 
 const getDiagnosesWithoutLatin: () => DiagnoseWithoutLatin[] = () => {
 	return diagnoses.map(({ latin, ...rest }) => rest)
