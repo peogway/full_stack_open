@@ -3,7 +3,7 @@ import { NewPatient, Patient, PatientWithoutSsn } from '../types/PatientType'
 import { v1 as uuid } from 'uuid'
 
 const getPatientsWithoutSensitiveInfo: () => PatientWithoutSsn[] = () => {
-	return patients.map(({ ssn, ...rest }) => rest)
+	return patients.map(({ ssn, ...rest }) => rest as PatientWithoutSsn)
 }
 
 const addPatient = (newPatient: NewPatient) => {
