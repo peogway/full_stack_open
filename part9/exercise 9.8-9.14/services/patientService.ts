@@ -1,11 +1,17 @@
 import patients from '../data/patients'
-import { Patient, PatientWithoutSsn } from '../types/PatientType'
+import { NewPatient, Patient, PatientWithoutSsn } from '../types/PatientType'
+import { v1 as uuid } from 'uuid'
 
 const getPatientsWithoutSensitiveInfo: () => PatientWithoutSsn[] = () => {
 	return patients.map(({ ssn, ...rest }) => rest)
 }
 
-const addPatient = (patient: Patient) => {
+const addPatient = (newPatient: NewPatient) => {
+	const patient: Patient = {
+		id: uuid(),
+		...newPatient,
+	}
+
 	patients.push(patient)
 	return patient
 }
