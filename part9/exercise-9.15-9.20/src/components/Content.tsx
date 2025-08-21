@@ -1,15 +1,11 @@
-interface ExerciseProp {
-	name: string
-	exerciseCount: number
-}
+import { CoursePart } from '../Types'
+import Part from './Part'
 
-const Content = ({ courseParts }: { courseParts: ExerciseProp[] }) => {
+const Content = ({ courseParts }: { courseParts: CoursePart[] }) => {
 	return (
 		<div>
 			{courseParts.map((course) => (
-				<p key={course.name}>
-					{course.name} {course.exerciseCount}
-				</p>
+				<Part key={course.name} coursePart={course} />
 			))}
 		</div>
 	)
