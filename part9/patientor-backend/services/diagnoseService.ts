@@ -1,11 +1,11 @@
 import diagnoses from '../data/diagnoses'
-import { Diagnose, DiagnoseWithoutLatin } from '../types/DianoseType'
+import { Diagnosis, DiagnosisWithoutLatin } from '../types/DianoseType'
 
-const getDiagnosesWithoutLatin: () => DiagnoseWithoutLatin[] = () => {
+const getDiagnosesWithoutLatin: () => DiagnosisWithoutLatin[] = () => {
 	return diagnoses.map(({ latin, ...rest }) => rest)
 }
 
-const addDiagnosis = (diagnosis: Diagnose) => {
+const addDiagnosis = (diagnosis: Diagnosis) => {
 	diagnoses.push(diagnosis)
 	return diagnosis
 }
