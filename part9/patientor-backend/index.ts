@@ -4,7 +4,7 @@ import * as z from 'zod'
 
 import patientRouter from './controllers/patients'
 
-import diagnoseService from './services/diagnoseService'
+import diagnosisRouter from './controllers/diagnosis'
 // import { Diagnose, DiagnoseWithoutLatin } from './types'
 
 const errorMiddleware = (
@@ -30,11 +30,8 @@ app.get('/api/ping', (_req, res) => {
 	res.send('pong')
 })
 
-app.get('/api/diagnose', (_req, res) => {
-	res.send(diagnoseService.getDiagnosesWithoutLatin())
-})
-
 app.use('/api/patients', patientRouter)
+app.use('/api/diagnoses', diagnosisRouter)
 
 app.use(errorMiddleware)
 
