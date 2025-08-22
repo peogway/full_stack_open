@@ -1,3 +1,4 @@
+import { Entry } from '../types/PatientType'
 const data = [
 	{
 		id: 'd2773336-f723-11e9-8f0b-362b9e155667',
@@ -6,6 +7,7 @@ const data = [
 		ssn: '090786-122X',
 		gender: 'male',
 		occupation: 'New york city cop',
+		entries: [] as Entry[],
 	},
 	{
 		id: 'd2773598-f723-11e9-8f0b-362b9e155667',
@@ -14,6 +16,7 @@ const data = [
 		ssn: '300179-77A',
 		gender: 'male',
 		occupation: 'Cop',
+		entries: [] as Entry[],
 	},
 	{
 		id: 'd27736ec-f723-11e9-8f0b-362b9e155667',
@@ -22,6 +25,7 @@ const data = [
 		ssn: '250470-555L',
 		gender: 'other',
 		occupation: 'Technician',
+		entries: [] as Entry[],
 	},
 	{
 		id: 'd2773822-f723-11e9-8f0b-362b9e155667',
@@ -30,6 +34,7 @@ const data = [
 		ssn: '050174-432N',
 		gender: 'female',
 		occupation: 'Forensic Pathologist',
+		entries: [] as Entry[],
 	},
 	{
 		id: 'd2773c6e-f723-11e9-8f0b-362b9e155667',
@@ -38,6 +43,7 @@ const data = [
 		ssn: '090471-8890',
 		gender: 'male',
 		occupation: 'Digital evangelist',
+		entries: [] as Entry[],
 	},
 ]
 
