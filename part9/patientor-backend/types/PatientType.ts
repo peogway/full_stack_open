@@ -1,17 +1,55 @@
 import { z } from 'zod'
 
-export const EntrySchema = z.object({
-	id: z.string(),
-	description: z.string(),
-})
-
 export enum Gender {
 	Male = 'male',
 	Female = 'female',
 	Other = 'other',
 }
 
-export type Entry = z.infer<typeof EntrySchema>
+// BaseEntry schema with diagnosisCodes
+export const DiagnosisSchema = z.object({
+	code: z.string(),
+	name: z.string(),
+	latin: z.string().optional(),
+})
+
+const BaseEntrySchema = z.object({
+	id: z.string(),
+	description: z.string(),
+	date: z.string(),
+	specialist: z.string(),
+	diagnosisCodes: z.array(DiagnosisSchema.shape.code).optional(), // array of codes
+})
+
+const HospitalEntrySchema = BaseEntrySchema.extend({
+	type: z.literal('Hospital'),
+	discharge: z.object({
+		date: z.string(),
+		criteria: z.string(),
+	}),
+})
+
+const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
+	type: z.literal('OccupationalHealthcare'),
+	employerName: z.string(),
+	sickLeave: z
+		.object({
+			startDate: z.string(),
+			endDate: z.string(),
+		})
+		.optional(),
+})
+
+const HealthCheckEntrySchema = BaseEntrySchema.extend({
+	type: z.literal('HealthCheck'),
+	healthCheckRating: z.enum(['0', '1', '2', '3']).transform(Number), // or z.nativeEnum(HealthCheckRating)
+})
+
+export const EntrySchema = z.discriminatedUnion('type', [
+	HospitalEntrySchema,
+	OccupationalHealthcareEntrySchema,
+	HealthCheckEntrySchema,
+])
 
 export const NewPatientSchema = z.object({
 	name: z
@@ -36,3 +74,4 @@ export interface Patient extends NewPatient {
 
 export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>
 
+export type Entry = z.infer<typeof EntrySchema>
