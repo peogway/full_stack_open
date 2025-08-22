@@ -16,7 +16,6 @@ const SelectedPatient = () => {
 			if (id) {
 				const patient = await patientService.getOne(id)
 				setPatient(patient)
-				console.log(patient)
 			}
 		}
 		void fetchPatient()
