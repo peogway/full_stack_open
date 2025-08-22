@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { DiagnosisSchema } from './DianoseType'
 
 export enum Gender {
 	Male = 'male',
@@ -7,11 +8,6 @@ export enum Gender {
 }
 
 // BaseEntry schema with diagnosisCodes
-export const DiagnosisSchema = z.object({
-	code: z.string(),
-	name: z.string(),
-	latin: z.string().optional(),
-})
 
 const BaseEntrySchema = z.object({
 	id: z.string(),
@@ -75,3 +71,4 @@ export interface Patient extends NewPatient {
 export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>
 
 export type Entry = z.infer<typeof EntrySchema>
+
