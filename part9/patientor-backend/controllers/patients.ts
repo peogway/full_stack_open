@@ -1,7 +1,6 @@
 import { NextFunction, Router, Request, Response } from 'express'
 import patientService from '../services/patientService'
-import { Patient, NewPatient } from '../types/PatientType'
-import { NewPatientSchema } from '../utils'
+import { Patient, NewPatient, NewPatientSchema } from '../types/PatientType'
 
 const patientRouter = Router()
 
@@ -14,18 +13,18 @@ const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
 	}
 }
 
-patientRouter.get('/api/patients', (_req, res) => {
+patientRouter.get('/', (_req, res) => {
 	console.log('someone requested patients')
 	res.send(patientService.getPatientsWithoutSensitiveInfo())
 })
 
-patientRouter.get('/api/patients/:id', (req, res) => {
+patientRouter.get('/:id', (req, res) => {
 	const patient = patientService.getPatientById(req.params.id)
 	res.json(patient)
 })
 
 patientRouter.post(
-	'/api/patients',
+	'/',
 	newPatientParser,
 	(
 		req: Request<unknown, unknown, NewPatient>,
