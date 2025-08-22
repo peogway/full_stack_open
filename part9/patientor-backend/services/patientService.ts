@@ -16,8 +16,16 @@ const addPatient = (newPatient: NewPatient) => {
 	return patient
 }
 
+const getPatientById = (id: string): PatientWithoutSsn | null => {
+	const patient = patients.find((p) => p.id === id)
+	if (!patient) return null
+	const { ssn, ...rest } = patient
+	return rest as PatientWithoutSsn
+}
+
 export default {
 	getPatientsWithoutSensitiveInfo,
 	addPatient,
+	getPatientById,
 }
 
