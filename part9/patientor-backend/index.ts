@@ -2,20 +2,11 @@ import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import * as z from 'zod'
 
+import patientRouter from './controllers/patients'
+
 import diagnoseService from './services/diagnoseService'
-import patientService from './services/patientService'
-import { NewPatientSchema } from './utils'
-import { Patient, NewPatient } from './types/PatientType'
 // import { Diagnose, DiagnoseWithoutLatin } from './types'
 
-const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
-	try {
-		NewPatientSchema.parse(req.body)
-		next()
-	} catch (error: unknown) {
-		next(error)
-	}
-}
 const errorMiddleware = (
 	error: unknown,
 	_req: Request,
@@ -43,19 +34,7 @@ app.get('/api/diagnose', (_req, res) => {
 	res.send(diagnoseService.getDiagnosesWithoutLatin())
 })
 
-app.get('/api/patients', (_req, res) => {
-	console.log('someone requested patients')
-	res.send(patientService.getPatientsWithoutSensitiveInfo())
-})
-
-app.post(
-	'/api/patients',
-	newPatientParser,
-	(req: Request<unknown, unknown, NewPatient>, res: Response<Patient>) => {
-		const addedEntry = patientService.addPatient(req.body)
-		res.json(addedEntry)
-	}
-)
+app.use('/api/patients', patientRouter)
 
 app.use(errorMiddleware)
 
