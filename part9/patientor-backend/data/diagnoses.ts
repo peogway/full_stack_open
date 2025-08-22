@@ -1,4 +1,6 @@
-const data = [
+import { Diagnosis } from '../types/DianoseType'
+
+const data: Diagnosis[] = [
 	{
 		code: 'M24.2',
 		name: 'Disorder of ligament',
