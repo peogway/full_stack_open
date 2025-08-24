@@ -64,3 +64,12 @@ export interface Patient {
 }
 
 export type PatientFormValues = Omit<Patient, 'id' | 'entries'>
+
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+	? Omit<T, K>
+	: never
+// Define Entry without the 'id' property
+export type NewEntry =
+	| UnionOmit<HospitalEntry, 'id'>
+	| UnionOmit<OccupationalHealthcareEntry, 'id'>
+	| UnionOmit<HealthCheckEntry, 'id'>
