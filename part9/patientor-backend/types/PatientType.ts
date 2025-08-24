@@ -38,7 +38,7 @@ const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
 
 const HealthCheckEntrySchema = BaseEntrySchema.extend({
 	type: z.literal('HealthCheck'),
-	healthCheckRating: z.enum(['0', '1', '2', '3']).transform(Number), // or z.nativeEnum(HealthCheckRating)
+	healthCheckRating: z.number().int().min(0).max(3),
 })
 
 export const EntrySchema = z.discriminatedUnion('type', [
