@@ -35,5 +35,18 @@ patientRouter.post(
 	}
 )
 
+patientRouter.post(
+	'/:id/entries',
+	newEntryParser,
+	(
+		req: Request<{ id: string }, unknown, NewEntry>,
+		res: Response<Entry | null>
+	) => {
+		const patientId = req.params.id.toString()
+		const addedEntry = patientService.addEntry(patientId, req.body)
+		res.json(addedEntry)
+	}
+)
+
 export default patientRouter
 
