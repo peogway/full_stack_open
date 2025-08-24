@@ -26,8 +26,11 @@ const HospitalEntryDetails = ({ entry }: { entry: HospitalEntry }) => {
 				borderRadius: '5px',
 				padding: '1px',
 				marginBottom: '10px',
+				paddingLeft: '20px',
+				paddingRight: '20px',
 			}}
 		>
+			<h4>Hospital Entry</h4>
 			<p>
 				{entry.date}{' '}
 				<MedicationLiquidIcon style={{ transform: 'translateY(5px)' }} />
@@ -58,8 +61,11 @@ const OccupationalHealthcareEntryDetails = ({
 				borderRadius: '5px',
 				padding: '1px',
 				marginBottom: '10px',
+				paddingLeft: '20px',
+				paddingRight: '20px',
 			}}
 		>
+			<h4>Occupational Healthcare Entry</h4>
 			<p>
 				{entry.date} <WorkIcon style={{ transform: 'translateY(5px)' }} />{' '}
 				{entry.employerName}
@@ -78,8 +84,11 @@ const HealthCheckEntryDetails = ({ entry }: { entry: HealthCheckEntry }) => {
 				borderRadius: '5px',
 				padding: '1px',
 				marginBottom: '10px',
+				paddingLeft: '20px',
+				paddingRight: '20px',
 			}}
 		>
+			<h4>Health Check Entry</h4>
 			<p>
 				{entry.date}{' '}
 				<MedicalServicesIcon style={{ transform: 'translateY(5px)' }} />
