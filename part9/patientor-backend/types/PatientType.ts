@@ -1,6 +1,11 @@
 import { z } from 'zod'
 import { DiagnosisSchema } from './DianoseType'
 
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+	? Omit<T, K>
+	: never
+// Define Entry without the 'id' property
+
 export enum Gender {
 	Male = 'male',
 	Female = 'female',
@@ -68,7 +73,14 @@ export interface Patient extends NewPatient {
 	id: string
 }
 
-export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>
+export type NonSensitivePatient = UnionOmit<Patient, 'ssn' | 'entries'>
 
 export type Entry = z.infer<typeof EntrySchema>
+
+export const NewEntrySchema = z.discriminatedUnion('type', [
+	HospitalEntrySchema.omit({ id: true }),
+	OccupationalHealthcareEntrySchema.omit({ id: true }),
+	HealthCheckEntrySchema.omit({ id: true }),
+])
+export type NewEntry = z.infer<typeof NewEntrySchema>
 
