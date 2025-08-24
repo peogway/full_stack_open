@@ -1,8 +1,29 @@
 import { NextFunction, Router, Request, Response } from 'express'
 import patientService from '../services/patientService'
-import { Patient, NewPatient, NewPatientSchema } from '../types/PatientType'
+import {
+	Patient,
+	NewPatient,
+	NewPatientSchema,
+	NewEntrySchema,
+	NewEntry,
+	Entry,
+} from '../types/PatientType'
+import { Diagnosis } from '../types/DianoseType'
 
 const patientRouter = Router()
+
+const newEntryParser = (req: Request, _res: Response, next: NextFunction) => {
+	try {
+		const diagnosisCodes = parseDiagnosisCodes(req.body)
+		NewEntrySchema.parse({
+			...req.body,
+			diagnosisCodes,
+		})
+		next()
+	} catch (error: unknown) {
+		next(error)
+	}
+}
 
 const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
 	try {
@@ -11,6 +32,15 @@ const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
 	} catch (error: unknown) {
 		next(error)
 	}
+}
+
+const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> => {
+	if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+		// we will just trust the data to be in correct form
+		return [] as Array<Diagnosis['code']>
+	}
+
+	return object.diagnosisCodes as Array<Diagnosis['code']>
 }
 
 patientRouter.get('/', (_req, res) => {
